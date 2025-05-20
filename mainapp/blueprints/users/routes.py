@@ -1,0 +1,50 @@
+from flask import Blueprint, render_template, request, redirect, url_for,flash
+from flask_login import login_user, logout_user, current_user
+from mainapp.app import db
+from mainapp.blueprints.users.models import Users
+
+users = Blueprint('users',__name__, template_folder="templates")
+
+@users.record
+def record_params(setup_state):
+    app = setup_state
+    users.bcrypt = getattr(setup_state, 'options', None).get('bcrypt')
+
+@users.route('/')
+@users.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        if current_user.is_authenticated:
+            return render_template('users/home.html')
+        return render_template('users/login.html')
+    elif request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        user = Users.query.filter(Users.username == username).first()
+        if user and users.bcrypt.check_password_hash(user.password, password):
+            login_user(user)
+            flash("Login Successfully!", 200)
+            return redirect(url_for('todos.index'))
+        else:
+            flash("Invalid password!", 400)
+            return redirect(url_for('users.login'))
+        
+@users.route('/register', methods=['POST'])
+def register():
+    username = request.form.get('username')
+    password = request.form.get('password')
+
+    hash_password = users.bcrypt.generate_password_hash(password).decode('utf-8')
+    user = Users(username=username, password=hash_password)
+
+    db.session.add(user)
+    db.session.commit()
+
+    return redirect(url_for('users.login'))
+
+@users.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('users.login'))
+
