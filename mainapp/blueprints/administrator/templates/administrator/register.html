@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}
+    Register Page
+{% endblock %}
+{% block content %}
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <div class="alert alert-info">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+    <div id="registration" class="register_form">
+        <h1>Register</h1>
+        <form action="{{ url_for('admin.register') }}" method="POST">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <input type="submit" value="Register">
+        </form>
+    </div>
+{% endblock %}

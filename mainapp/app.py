@@ -30,6 +30,9 @@ def create_app():
 
     from mainapp.blueprints.users.routes import users
     app.register_blueprint(users, url_prefix='/', bcrypt=bcrypt)
+
+    from mainapp.blueprints.administrator.routes import admin
+    app.register_blueprint(admin, url_prefix='/admin', bcrypt=bcrypt)
     
     
     migrate = Migrate(app, db)

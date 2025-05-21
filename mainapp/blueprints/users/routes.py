@@ -16,7 +16,12 @@ def login():
     if request.method == 'GET':
         if current_user.is_authenticated:
             return render_template('users/home.html')
-        return render_template('users/login.html')
+        
+        elif not Users.query.filter(Users.role == 'administrator').first():
+            flash("Account manager required!")
+            return redirect(url_for('admin.register'))
+        else:   
+            return render_template('users/login.html')
     elif request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
@@ -25,7 +30,12 @@ def login():
         if user and users.bcrypt.check_password_hash(user.password, password):
             login_user(user)
             flash("Login Successfully!", 200)
-            return redirect(url_for('todos.index'))
+
+            # separate normal user from admin
+            if current_user.role == "administrator":
+                return redirect(url_for('admin.main'))
+            else:
+                return redirect(url_for('todos.index'))
         else:
             flash("Invalid password!", 400)
             return redirect(url_for('users.login'))
@@ -36,7 +46,7 @@ def register():
     password = request.form.get('password')
 
     hash_password = users.bcrypt.generate_password_hash(password).decode('utf-8')
-    user = Users(username=username, password=hash_password)
+    user = Users(username=username, password=hash_password, role=None)
 
     db.session.add(user)
     db.session.commit()

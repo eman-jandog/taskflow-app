@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}
+    Administrator Page
+{% endblock %}
+{% block content %}
+    <h1>Dashboard</h1>
+    <ul>
+        {% if users %}
+            {% for user in users %}
+                <li style="display: inline;">{{user}}</li><button id="btn-del" onclick="delUser({{ user.uid }})">Delete</button>
+                <ul>
+                    {% with todos = Todos.query.filter(Todos.user_id == user.uid).all() %}
+                        {% for todo in todos %}
+                            <li>{{todo.description}}</li>
+                        {% endfor %}
+                    {% endwith %}
+                </ul>
+            {% endfor %}
+        {% else %}
+            <h1>No registered users.</h1>
+        {% endif %}
+    </ul>
+
+    <script type="text/javascript">
+        async function delUser(uid) {
+            alert('You are deleting a user!')
+            fetch("{{ url_for('admin.delete', uid=uid) }}" + uid, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.reload()
+                }
+            })
+            .catch(error => {
+                console.error('Error: ', error)
+            })
+        }
+    </script>
+{% endblock %}

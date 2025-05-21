@@ -5,6 +5,7 @@ class Users(db.Model):
     uid = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
+    role = db.Column(db.String)
 
     @property
     def is_active(self):
@@ -21,7 +22,7 @@ class Users(db.Model):
     def get_id(self):
         return str(self.uid)
 
-    def __repr__(self):
-        return f'<Id:>{Users.uid}, <Username:> {Users.self}, <Password:> {'*'*10}'
+    def __str__(self):
+        return f'<Id:>{self.uid}, <Username:> {self.username}, <Password:> {'*'*10}, <Role:> {self.role}'
 
     
