@@ -23,6 +23,6 @@ class Users(db.Model):
         return str(self.uid)
 
     def __str__(self):
-        return f'<Id:>{self.uid}, <Username:> {self.username}, <Password:> {'*'*10}, <Role:> {self.role}'
+        return f'<Id:>{self.uid}, <Username:> {self.username}, <Password:> *********, <Role:> {self.role}'
 
     
