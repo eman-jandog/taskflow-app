@@ -21,7 +21,6 @@ COPY . .
 WORKDIR /flask-app/mainapp
 
 # initialize database
-RUN flask db init
 RUN flask db migrate -m "initial migration"
 RUN flask db upgrade
 

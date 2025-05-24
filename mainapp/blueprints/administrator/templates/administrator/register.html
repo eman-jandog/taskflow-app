@@ -1,8 +1,9 @@
-{% extends "base.html" %}
-{% block title %}
+{% extends "layout.html" %}
+{% block page_title %}
     Register Page
 {% endblock %}
-{% block content %}
+
+{% block main_content %}
     {% with messages = get_flashed_messages() %}
         {% for message in messages %}
             <div class="alert alert-info">{{ message }}</div>
