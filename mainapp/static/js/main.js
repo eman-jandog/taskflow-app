@@ -2,21 +2,26 @@ document.addEventListener('DOMContentLoaded', function() {
     // Page navigation
     const signinPage = document.getElementById('signin-page');
     const signupPage = document.getElementById('signup-page');
-    const todoApp = document.getElementById('todo-app');
     const goToSignup = document.getElementById('go-to-signup');
     const goToSignin = document.getElementById('go-to-signin');
     const signOut = document.getElementById('sign-out');
     const signinForm = document.getElementById('signin-form');
     const signupForm = document.getElementById('signup-form');
+    const registerForm = document.getElementById('register-form')
+    const flashMsg = document.getElementById('flash-msg')
+
+    setTimeout(() => {
+        flashMsg.style.display = 'none';
+    }, 2000)
+    // }    
+    // // Check if user is logged in
+    // const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     
-    // Check if user is logged in
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    
-    if (isLoggedIn) {
-        showTodoApp();
-    } else {
-        showSigninPage();
-    }
+    // if (isLoggedIn) {
+    //     showTodoApp();
+    // } else {
+    //     showSigninPage();
+    // }
     
     // Navigation between pages
     goToSignup.addEventListener('click', function(e) {
@@ -29,81 +34,29 @@ document.addEventListener('DOMContentLoaded', function() {
         showSigninPage();
     });
     
-    signOut.addEventListener('click', function(e) {
-        e.preventDefault();
-        localStorage.setItem('isLoggedIn', 'false');
-        showSigninPage();
-    });
-    
-    // Form submissions
-    signinForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const username = document.getElementById('signin-username').value;
-        const password = document.getElementById('signin-password').value;
-
-        if (username && password) {
-
-            const creds = { username: username, password: password}
-            
-            fetch("{{ url_for('users.login') }}", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json; charset=utf-8'
-                },
-                body: JSON.stringify(creds)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`)
-                }
-            })
-            .catch(error =>  {
-                console.error(`Fetch error: `, error);
-            })
-        }
-    });
-    
-    signupForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const username = document.getElementById('signup-username').value;
-        const email = document.getElementById('signup-email').value;
-        const password = document.getElementById('signup-password').value;
-        const confirmPassword = document.getElementById('signup-confirm-password').value;
-        
-        // Simple validation
-        if (password !== confirmPassword) {
-            alert('Passwords do not match!');
-            return;
-        }
-        
-        // Demo registration (in a real app, this would be a server request)
-        if (username && email && password) {
-            fetch('{{ url_for("users.register") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json; charset=utf-8'
-                },
-                body: JSON.stringify({username: username, email: email, password: password})
-            })
-            .then(response => {
-                if(!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`)
-                }
-            })
-            .catch(error => {
-                console.error('Error: ', error)
-            })
-        }
-    });
+    // signOut.addEventListener('click', function(e) {
+    //     e.preventDefault();
+    //     localStorage.setItem('isLoggedIn', 'false');
+    //     showSigninPage();
+    // });
     
     function showSigninPage() {
         signinPage.style.display = 'block';
         signupPage.style.display = 'none';
+        todoApp.style.display = 'none';
     }
     
     function showSignupPage() {
         signinPage.style.display = 'none';
         signupPage.style.display = 'block';
+        todoApp.style.display = 'none';
+    }
+    
+    function showTodoApp() {
+        signinPage.style.display = 'none';
+        signupPage.style.display = 'none';
+        todoApp.style.display = 'block';
+        initTodoApp();
     }
     
     // Todo App Functionality

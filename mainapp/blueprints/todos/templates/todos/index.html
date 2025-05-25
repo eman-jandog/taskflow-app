@@ -1,30 +1,24 @@
 {% extends "base.html" %}
-{% block title %}
-    TODOs
-{% endblock %}
+
+{% block title %}TaskFlow{% endblock %}
+
 {% block content %}
-    {% with messages = get_flashed_messages() %}
-        {% for message in messages %}
-            <div class="alert alert-info">{{ message }}</div>
-        {% endfor %}
-    {% endwith %}
-    <!-- Todo App -->
-    <div class="app-container bg-white" id="todo-app" style="display: none;">
+    <div class="app-container bg-white" id="todo-app" style="display: block;">
         <div class="app-header">
             <div class="d-flex justify-content-between align-items-center">
                 <h1 class="mb-0">TaskFlow</h1>
                 <div class="d-flex align-items-center">
-                    <span id="date-display" class="me-3"></span>
+                    <span id="date-display" class="me-3">Sunday, May 25, 2025</span>
                     <span id="task-counter" class="badge bg-white text-primary me-3">0 tasks</span>
                     <div class="dropdown">
                         <div class="user-avatar" id="user-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-person-fill"></i>
                         </div>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="user-dropdown">
-                            <li><a class="dropdown-item" href="https://bc74xt1zrzshdsf4.canva-hosted-embed.com/codelet/AAEAEGJjNzR4dDF6cnpzaGRzZjQAAAAAAZcG4feXlSiV7qhUWFu2equ1gxbbGzHQ_sxaM7CiyZZaYuyV0bg/#"><i class="bi bi-person"></i> Profile</a></li>
-                            <li><a class="dropdown-item" href="https://bc74xt1zrzshdsf4.canva-hosted-embed.com/codelet/AAEAEGJjNzR4dDF6cnpzaGRzZjQAAAAAAZcG4feXlSiV7qhUWFu2equ1gxbbGzHQ_sxaM7CiyZZaYuyV0bg/#"><i class="bi bi-gear"></i> Settings</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Settings</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="https://bc74xt1zrzshdsf4.canva-hosted-embed.com/codelet/AAEAEGJjNzR4dDF6cnpzaGRzZjQAAAAAAZcG4feXlSiV7qhUWFu2equ1gxbbGzHQ_sxaM7CiyZZaYuyV0bg/#" id="sign-out"><i class="bi bi-box-arrow-right"></i> Sign out</a></li>
+                            <li><a class="dropdown-item" href="#" id="sign-out"><i class="bi bi-box-arrow-right"></i> Sign out</a></li>
                         </ul>
                     </div>
                 </div>
@@ -54,12 +48,28 @@
             
             <div id="todo-list">
                 <!-- Todo items will be added here dynamically -->
-                <div class="empty-state" id="empty-state">
+                <div class="todo-item p-3 d-flex justify-content-between align-items-center" data-id="1748186302573">
+                            <div class="d-flex align-items-center">
+                                <div class="form-check">
+                                    <input class="form-check-input btn-complete" type="checkbox">
+                                </div>
+                                <span class="ms-2 todo-text">sample</span>
+                            </div>
+                            <div class="todo-actions">
+                                <button class="btn-edit" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn-delete" title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                </div>
+                <div class="empty-state" id="empty-state" style="display: none;">
                     <i class="bi bi-clipboard"></i>
                     <h5>No tasks yet</h5>
                     <p>Add a new task to get started</p>
                 </div>
             </div>
-        </div>
+        </div>  
     </div>
 {% endblock %}

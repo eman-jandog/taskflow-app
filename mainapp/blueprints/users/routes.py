@@ -15,13 +15,13 @@ def record_params(setup_state):
 def login():
     if request.method == 'GET':
         if current_user.is_authenticated:
-            return render_template('users/home.html')
-        
+            return render_template('users/home.html')        
         elif not Users.query.filter(Users.role == 'administrator').first():
             flash("Account manager required!")
             return redirect(url_for('admin.register'))
         else:   
             return render_template('users/login.html')
+        
     elif request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
@@ -29,18 +29,19 @@ def login():
         user = Users.query.filter(Users.username == username).first()
 
         if not user:
-            return jsonify({'message': 'Invalid Username!'}), 400
+            flash('Invalid username!', 'error')
+            return redirect(url_for('users.login'))
 
         if users.bcrypt.check_password_hash(user.password, password):
             login_user(user)
-
             # separate normal user from admin
             if current_user.role == "administrator":
                 return redirect(url_for('admin.main'))
             else:
                 return redirect(url_for('todos.index')) 
         else:
-            return jsonify({'message': 'Invalid Password}!'}), 400
+            flash('Invalid password!', 'error')
+            return redirect(url_for('users.login'))
         
 @users.route('/register', methods=['POST'])
 def register():
@@ -55,10 +56,12 @@ def register():
         db.session.add(user)
         db.session.commit()
 
+        flash(f'Login your account!', 'success')
         return redirect(url_for('users.login'))
 
     except Exception as e:
-        return jsonify({'error', e}), 400
+        flash(f'Error: {e}', 'error')
+        return redirect(url_for('users.login'))
 
 
 @users.route('/logout')

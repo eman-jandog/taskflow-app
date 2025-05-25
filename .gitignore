@@ -1,5 +1,6 @@
 # Vscode
 .vscode/
+mainapp/migrations/
 
 # Python .gitignore
 # Byte-compiled / optimized / DLL files

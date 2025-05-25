@@ -289,3 +289,9 @@ body {
     margin-right: 0.5rem;
     color: #6c757d;
 }
+
+
+.flash-message {
+    position: absolute !important;
+    top: 5rem;
+}

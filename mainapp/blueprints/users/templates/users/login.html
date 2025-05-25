@@ -1,100 +1,109 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Login Page
+    TaskFlow Login
 {% endblock %}
 
 {% block content %}
-            <!-- Sign In Page -->
-            <div class="auth-container" id="signin-page" style="display: none;">
-                <div class="auth-header">
-                    <div class="auth-logo">
-                        <i class="bi bi-check2-circle"></i>
-                    </div>
-                    <h2>Welcome to TaskFlow</h2>
-                    <p class="mb-0">Sign in to continue to your tasks</p>
-                </div>
-                <div class="auth-form">
-                    <form id="signin-form" action="{{ url_for('users.login' )}}" method="POST">
-                        <div class="mb-3">
-                            <input name="username" type="text" class="form-control auth-input" id="signin-username" placeholder="Username" required="">
-                        </div>
-                        <div class="mb-3">
-                            <input name="password" type="password" class="form-control auth-input" id="signin-password" placeholder="Password" required="">
-                        </div>
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="remember-me">
-                            <label class="form-check-label" for="remember-me">Remember me</label>
-                            <a href="#forgot-password" class="float-end text-decoration-none" style="color: var(--primary-color);">Forgot password?</a>
-                        </div>
-                        <button type="submit" class="btn btn-primary auth-btn">Sign In</button>
-                    </form>
-                    
-                    <div class="auth-divider">
-                        <span>OR CONTINUE WITH</span>
-                    </div>
-                    
-                    <button class="social-btn">
-                        <i class="bi bi-google" style="color: #DB4437;"></i>
-                        <span>Google</span>
-                    </button>
-                    <button class="social-btn">
-                        <i class="bi bi-facebook" style="color: #4267B2;"></i>
-                        <span>Facebook</span>
-                    </button>
-                    
-                    <div class="auth-footer">
-                        <p>Don't have an account? <a href="#signup" id="go-to-signup">Sign up</a></p>
-                    </div>
-                </div>
+<!-- Sign In Page -->
+<div class="auth-container" id="signin-page">
+    <div class="auth-header">
+        <div class="auth-logo">
+            <i class="bi bi-check2-circle"></i>
+        </div>
+        <h2>Welcome to TaskFlow</h2>
+        <p class="mb-0">Sign in to continue to your tasks</p>
+    </div>
+    <div class="auth-form">
+        <form id="signin-form" method="POST" action="{{ url_for('users.login') }}">
+            <div class="mb-3">
+                <input type="text" name="username" class="form-control auth-input" id="signin-username" placeholder="Username" required>
             </div>
-            
-            <!-- Sign Up Page -->
-            <div class="auth-container" id="signup-page" style="display: block;">
-                <div class="auth-header">
-                    <div class="auth-logo">
-                        <i class="bi bi-check2-circle"></i>
-                    </div>
-                    <h2>Create Account</h2>
-                    <p class="mb-0">Get started with TaskFlow</p>
-                </div>
-                <div class="auth-form">
-                    <form id="signup-form" action="{{ url_for('users.register' )}}" method="">
-                        <div class="mb-3">
-                            <input type="text" class="form-control auth-input" id="signup-username" placeholder="Username" required="">
-                        </div>
-                        <div class="mb-3">
-                            <input type="email" class="form-control auth-input" id="signup-email" placeholder="Email address" required="">
-                        </div>
-                        <div class="mb-3">
-                            <input type="password" class="form-control auth-input" id="signup-password" placeholder="Password" required="">
-                        </div>
-                        <div class="mb-3">
-                            <input type="password" class="form-control auth-input" id="signup-confirm-password" placeholder="Confirm password" required="">
-                        </div>
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="terms" required="">
-                            <label class="form-check-label" for="terms">I agree to the <a href="#" style="color: var(--primary-color);">Terms of Service</a> and <a href="#" style="color: var(--primary-color);">Privacy Policy</a></label>
-                        </div>
-                        <button type="submit" class="btn btn-primary auth-btn">Create Account</button>
-                    </form>
-                    
-                    <div class="auth-divider">
-                        <span>OR SIGN UP WITH</span>
-                    </div>
-                    
-                    <button class="social-btn">
-                        <i class="bi bi-google" style="color: #DB4437;"></i>
-                        <span>Google</span>
-                    </button>
-                    <button class="social-btn">
-                        <i class="bi bi-facebook" style="color: #4267B2;"></i>
-                        <span>Facebook</span>
-                    </button>
-                    
-                    <div class="auth-footer">
-                        <p>Already have an account? <a href="#" id="go-to-signin">Sign in</a></p>
-                    </div>
-                </div>
+            <div class="mb-3">
+                <input type="password" name="password" class="form-control auth-input" id="signin-password" placeholder="Password" required>
             </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" name="remember" class="form-check-input" id="remember-me" value="true">
+                <label class="form-check-label" for="remember-me">Remember me</label>
+                <a href="#" class="float-end text-decoration-none" style="color: var(--primary-color);">Forgot password?</a>
+            </div>
+            <button type="submit" class="btn btn-primary auth-btn">Sign In</button>
+        </form>
+        
+        <div class="auth-divider">
+            <span>OR CONTINUE WITH</span>
+        </div>
+        
+        <button class="social-btn">
+            <i class="bi bi-google" style="color: #DB4437;"></i>
+            <span>Google</span>
+        </button>
+        <button class="social-btn">
+            <i class="bi bi-facebook" style="color: #4267B2;"></i>
+            <span>Facebook</span>
+        </button>
+        
+        <div class="auth-footer">
+            <p>Don't have an account? <a href="#" id="go-to-signup">Sign up</a></p>
+        </div>
+    </div>
+</div>
+
+<!-- Sign Up Page -->
+<div class="auth-container" id="signup-page" style="display: none;">    
+    <div class="auth-header">
+        <div class="auth-logo">
+            <i class="bi bi-check2-circle"></i>
+        </div>
+        <h2>Create Account</h2>
+        <p class="mb-0">Get started with TaskFlow</p>
+    </div>
+    <div class="auth-form">
+        <form id="signup-form" method="POST" action="{{ url_for('users.register') }}">
+            <div class="mb-3">
+                <input type="text" name="username" class="form-control auth-input" id="signup-username" placeholder="Username" required>
+            </div>
+            <div class="mb-3">
+                <input type="email" name="email" class="form-control auth-input" id="signup-email" placeholder="Email address" required>
+            </div>
+            <div class="mb-3">
+                <input type="password" name="password" class="form-control auth-input" id="signup-password" placeholder="Password" required>
+            </div>
+            <div class="mb-3">
+                <input type="password" class="form-control auth-input" id="signup-confirm-password" placeholder="Confirm password" required>
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" name="terms" class="form-check-input" id="terms" required>
+                <label class="form-check-label" for="terms">I agree to the <a href="#" style="color: var(--primary-color);">Terms of Service</a> and <a href="#" style="color: var(--primary-color);">Privacy Policy</a></label>
+            </div>
+            <button type="submit" class="btn btn-primary auth-btn">Create Account</button>
+        </form>
+        
+        <div class="auth-divider">
+            <span>OR SIGN UP WITH</span>
+        </div>
+        
+        <button class="social-btn">
+            <i class="bi bi-google" style="color: #DB4437;"></i>
+            <span>Google</span>
+        </button>
+        <button class="social-btn">
+            <i class="bi bi-facebook" style="color: #4267B2;"></i>
+            <span>Facebook</span>
+        </button>
+        
+        <div class="auth-footer">
+            <p>Already have an account? <a href="#" id="go-to-signin">Sign in</a></p>
+        </div>
+    </div>
+</div>
+
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div id="flash-msg" class="flash-message alert {% if category == 'error' %}alert-danger{% else %}alert-info{% endif %}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 {% endblock %}

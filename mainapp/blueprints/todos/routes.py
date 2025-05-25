@@ -11,7 +11,7 @@ todos = Blueprint('todos', __name__, template_folder='templates')
 @login_required
 def index():
     todos_list = Todos.query.filter(Todos.user_id == current_user.uid).all()
-    return render_template('todos/index.html', todos=todos_list)
+    return render_template('todos/index.html', todo_list=todos_list)
     
 
 @todos.route('/create', methods=['POST'])
