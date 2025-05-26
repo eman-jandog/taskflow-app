@@ -17,7 +17,7 @@ def login():
         if current_user.is_authenticated:
             return render_template('users/home.html')        
         elif not Users.query.filter(Users.role == 'administrator').first():
-            flash("Account manager required!")
+            flash("Account manager required!", 'error')
             return redirect(url_for('admin.register'))
         else:   
             return render_template('users/login.html')

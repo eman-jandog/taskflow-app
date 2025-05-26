@@ -40,7 +40,7 @@ def register():
 
         db.session.add(user)
         db.session.commit()
-
+        
         return redirect(url_for('admin.main'))
     
     elif request.method == 'GET':
