@@ -8,7 +8,7 @@
             <div class="d-flex justify-content-between align-items-center">
                 <h1 class="mb-0">TaskFlow</h1>
                 <div class="d-flex align-items-center">
-                    <span id="date-display" class="me-3">Sunday, May 25, 2025</span>
+                    <span id="date-display" class="me-3">(Week), (Month) (Day), (Year)"</span>
                     <span id="task-counter" class="badge bg-white text-primary me-3">0 tasks</span>
                     <div class="dropdown">
                         <div class="user-avatar" id="user-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -31,7 +31,7 @@
                 <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
             </div>
             
-            <form id="todo-form" class="mb-4">
+            <form id="todo-form" class="mb-4" method="POST" action="{{ url_for('todos.create') }}">
                 <div class="input-group">
                     <input type="text" id="todo-input" class="form-control todo-input" placeholder="Add a new task..." required="">
                     <button type="submit" class="btn btn-primary add-btn">
@@ -72,4 +72,5 @@
             </div>
         </div>  
     </div>
+    <script></script>
 {% endblock %}

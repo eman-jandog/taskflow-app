@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         flashMsg.style.display = 'none';
     }, 2000)
+    
     // }    
     // // Check if user is logged in
     // const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
@@ -24,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // }
     
     // Navigation between pages
+    
     goToSignup.addEventListener('click', function(e) {
         e.preventDefault();
         showSignupPage();
@@ -50,13 +52,6 @@ document.addEventListener('DOMContentLoaded', function() {
         signinPage.style.display = 'none';
         signupPage.style.display = 'block';
         todoApp.style.display = 'none';
-    }
-    
-    function showTodoApp() {
-        signinPage.style.display = 'none';
-        signupPage.style.display = 'none';
-        todoApp.style.display = 'block';
-        initTodoApp();
     }
     
     // Todo App Functionality

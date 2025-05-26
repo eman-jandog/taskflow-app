@@ -15,10 +15,12 @@ def record_params(setup_state):
 def login():
     if request.method == 'GET':
         if current_user.is_authenticated:
-            return render_template('users/home.html')        
+            return redirect(url_for('todos.index')) 
+        
         elif not Users.query.filter(Users.role == 'administrator').first():
             flash("Account manager required!", 'error')
             return redirect(url_for('admin.register'))
+        
         else:   
             return render_template('users/login.html')
         
@@ -38,6 +40,7 @@ def login():
             if current_user.role == "administrator":
                 return redirect(url_for('admin.main'))
             else:
+                flash('Successfully login.', 'success')
                 return redirect(url_for('todos.index')) 
         else:
             flash('Invalid password!', 'error')
