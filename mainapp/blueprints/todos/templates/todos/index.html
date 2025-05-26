@@ -1,49 +1,75 @@
 {% extends "base.html" %}
-{% block title %}
-    TODOs
-{% endblock %}
+
+{% block title %}TaskFlow{% endblock %}
+
 {% block content %}
-    {% with messages = get_flashed_messages() %}
-        {% for message in messages %}
-            <div class="alert alert-info">{{ message }}</div>
-        {% endfor %}
-    {% endwith %}
-    <h1>My Todos</h1>
-    <ul>
-        <!-- todo list here --> 
-         {% for todo in todos %}
-            <li>
-                {{ todo.description }}
-                <button onclick='deleteTodo({{ todo.tid }})'>Delete</button>
-            </li>
-         {% endfor %} 
-        <li>
-            <button onclick="showTodoForm()">Create</button>
-            <form action="{{ url_for('todos.create') }}" method="POST" id="add-todo">
-                <input type="text" name="description" placeholder="Enter your todo" required>
-                <input type="submit"value="Add">    
+    <div class="app-container bg-white" id="todo-app" style="display: block;">
+        <div class="app-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="mb-0">TaskFlow</h1>
+                <div class="d-flex align-items-center">
+                    <span id="date-display" class="me-3">Sunday, May 25, 2025</span>
+                    <span id="task-counter" class="badge bg-white text-primary me-3">0 tasks</span>
+                    <div class="dropdown">
+                        <div class="user-avatar" id="user-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-fill"></i>
+                        </div>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="user-dropdown">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="sign-out"><i class="bi bi-box-arrow-right"></i> Sign out</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <p class="mb-0 mt-2 opacity-75">Organize your tasks efficiently</p>
+        </div>
+        
+        <div class="p-4">
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+            </div>
+            
+            <form id="todo-form" class="mb-4">
+                <div class="input-group">
+                    <input type="text" id="todo-input" class="form-control todo-input" placeholder="Add a new task..." required="">
+                    <button type="submit" class="btn btn-primary add-btn">
+                        <i class="bi bi-plus-lg me-1"></i> Add
+                    </button>
+                </div>
             </form>
-        </li>
-    </ul>
-    <script type="text/javascript">
-        function showTodoForm() {
-            const form = document.getElementById('add-todo');
-            form.style.display = 'inline';
-        }
-
-        function deleteTodo(tid) {
-            fetch('{{ url_for("todos.delete", tid=tid) }}' + tid, {
-                method: 'DELETE'
-            })
-            .then(response => {
-                if (response.ok) {
-                    window.location.reload();
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
-    </script>
-
+            
+            <div class="filters mb-4 d-flex justify-content-center">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="active">Active</button>
+                <button class="filter-btn" data-filter="completed">Completed</button>
+            </div>
+            
+            <div id="todo-list">
+                <!-- Todo items will be added here dynamically -->
+                <div class="todo-item p-3 d-flex justify-content-between align-items-center" data-id="1748186302573">
+                            <div class="d-flex align-items-center">
+                                <div class="form-check">
+                                    <input class="form-check-input btn-complete" type="checkbox">
+                                </div>
+                                <span class="ms-2 todo-text">sample</span>
+                            </div>
+                            <div class="todo-actions">
+                                <button class="btn-edit" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn-delete" title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                </div>
+                <div class="empty-state" id="empty-state" style="display: none;">
+                    <i class="bi bi-clipboard"></i>
+                    <h5>No tasks yet</h5>
+                    <p>Add a new task to get started</p>
+                </div>
+            </div>
+        </div>  
+    </div>
 {% endblock %}

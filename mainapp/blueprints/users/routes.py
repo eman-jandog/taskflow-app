@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for,flash
+from flask import Blueprint, render_template, request, redirect, url_for,  flash, jsonify
 from flask_login import login_user, logout_user, current_user
 from mainapp.app import db
 from mainapp.blueprints.users.models import Users
@@ -15,43 +15,54 @@ def record_params(setup_state):
 def login():
     if request.method == 'GET':
         if current_user.is_authenticated:
-            return render_template('users/home.html')
-        
+            return render_template('users/home.html')        
         elif not Users.query.filter(Users.role == 'administrator').first():
             flash("Account manager required!")
             return redirect(url_for('admin.register'))
         else:   
             return render_template('users/login.html')
+        
     elif request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
 
         user = Users.query.filter(Users.username == username).first()
-        if user and users.bcrypt.check_password_hash(user.password, password):
-            login_user(user)
-            flash("Login Successfully!", 200)
 
+        if not user:
+            flash('Invalid username!', 'error')
+            return redirect(url_for('users.login'))
+
+        if users.bcrypt.check_password_hash(user.password, password):
+            login_user(user)
             # separate normal user from admin
             if current_user.role == "administrator":
                 return redirect(url_for('admin.main'))
             else:
-                return redirect(url_for('todos.index'))
+                return redirect(url_for('todos.index')) 
         else:
-            flash("Invalid password!", 400)
+            flash('Invalid password!', 'error')
             return redirect(url_for('users.login'))
         
 @users.route('/register', methods=['POST'])
 def register():
     username = request.form.get('username')
     password = request.form.get('password')
+    email = request.form.get('email')
 
-    hash_password = users.bcrypt.generate_password_hash(password).decode('utf-8')
-    user = Users(username=username, password=hash_password, role=None)
+    try:
+        hash_password = users.bcrypt.generate_password_hash(password).decode('utf-8')
+        user = Users(username=username, email=email, password=hash_password, role=None)
 
-    db.session.add(user)
-    db.session.commit()
+        db.session.add(user)
+        db.session.commit()
 
-    return redirect(url_for('users.login'))
+        flash(f'Login your account!', 'success')
+        return redirect(url_for('users.login'))
+
+    except Exception as e:
+        flash(f'Error: {e}', 'error')
+        return redirect(url_for('users.login'))
+
 
 @users.route('/logout')
 def logout():

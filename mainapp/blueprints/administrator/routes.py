@@ -33,9 +33,10 @@ def register():
     if request.method == "POST":
         username = request.form.get('username')
         password = request.form.get('password')
+        email = request.form.get('email')
 
         hash_password = admin.bcrypt.generate_password_hash(password).decode('utf-8')
-        user = Users(username=username, password=hash_password, role="administrator")
+        user = Users(username=username, password=hash_password, email=email, role="administrator")
 
         db.session.add(user)
         db.session.commit()
