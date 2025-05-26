@@ -49,7 +49,7 @@
         </button>
         
         <div class="auth-footer">
-            <p>Already have an account? <a href="#" id="go-to-signin">Sign in</a></p>
+            <p>Already have an account? <a href="{{ url_for('users.login') }}" id="go-to-signin">Sign in</a></p>
         </div>
     </div>
 </div>
@@ -60,4 +60,6 @@
         {% endfor %}
     {% endif %}
 {% endwith %}
+
+<script src="{{ url_for('static', filename='js/utility.js') }}"></script>
 {% endblock %}
