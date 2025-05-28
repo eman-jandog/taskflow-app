@@ -26,36 +26,11 @@ function initTodoApp() {
     // updateCounters();
     
     // Add new todo
-    // todoForm.addEventListener('submit', async function(e) {
-    //     e.preventDefault();
-
-    //     const form = this;
-    //     const ADD_TODO = this.dataset.urlAction;
-    //     const formData = new FormData(form);
-
-    //     try {
-    //         const response = await fetch(ADD_TODO, {
-    //             method: 'POST',
-    //             body: formData                
-    //         })
-
-    //         if (response.ok) {
-    //             const data = await response.json()
-    //             console.log(data)
-    //             // todos.push(newTodo);
-    //             // saveTodos();
-    //             // renderTodos();
-    //             // updateCounters();
-            
-    //             // todoInput.value = '';
-    //             // todoInput.focus();
-    //         } else {
-    //             throw new Error('')
-    //         }
-    //     } catch(e) {
-    //         console.error('Error: ', e)
-    //     }
-    // });
+    todoForm.addEventListener('htmx:afterRequest', async function(e) {
+        if (e.detail.elt.id == "todo-form" && e.detail.xhr.status == 200) {
+            todoInput.value = ""
+        }
+    });
     
     // Filter todos
     filterButtons.forEach(button => {
@@ -68,45 +43,45 @@ function initTodoApp() {
     });
     
     // Event delegation for todo actions
-    todoList.addEventListener('click', function(e) {
-        const target = e.target;
-        const todoItem = target.closest('.todo-item');
+    // todoList.addEventListener('click', function(e) {
+    //     const target = e.target;
+    //     const todoItem = target.closest('.todo-item');
         
-        if (!todoItem) return;
+    //     if (!todoItem) return;
         
-        const todoId = parseInt(todoItem.dataset.id);
-        const todoIndex = todos.findIndex(todo => todo.id === todoId);
+    //     const todoId = parseInt(todoItem.dataset.id);
+    //     const todoIndex = todos.findIndex(todo => todo.id === todoId);
         
-        if (todoIndex === -1) return;
+    //     if (todoIndex === -1) return;
         
-        // Complete todo
-        if (target.classList.contains('btn-complete') || target.closest('.btn-complete')) {
-            todos[todoIndex].completed = !todos[todoIndex].completed;
-            saveTodos();
-            renderTodos();
-            updateCounters();
-        }
+    //     // Complete todo
+    //     if (target.classList.contains('btn-complete') || target.closest('.btn-complete')) {
+    //         todos[todoIndex].completed = !todos[todoIndex].completed;
+    //         saveTodos();
+    //         renderTodos();
+    //         updateCounters();
+    //     }
         
-        // Edit todo
-        if (target.classList.contains('btn-edit') || target.closest('.btn-edit')) {
-            const newText = prompt('Edit task:', todos[todoIndex].text);
-            if (newText !== null && newText.trim() !== '') {
-                todos[todoIndex].text = newText.trim();
-                saveTodos();
-                renderTodos();
-            }
-        }
+    //     // Edit todo
+    //     if (target.classList.contains('btn-edit') || target.closest('.btn-edit')) {
+    //         const newText = prompt('Edit task:', todos[todoIndex].text);
+    //         if (newText !== null && newText.trim() !== '') {
+    //             todos[todoIndex].text = newText.trim();
+    //             saveTodos();
+    //             renderTodos();
+    //         }
+    //     }
         
-        // Delete todo
-        if (target.classList.contains('btn-delete') || target.closest('.btn-delete')) {
-            if (confirm('Are you sure you want to delete this task?')) {
-                todos.splice(todoIndex, 1);
-                saveTodos();
-                renderTodos();
-                updateCounters();
-            }
-        }
-    });
+    //     // Delete todo
+    //     if (target.classList.contains('btn-delete') || target.closest('.btn-delete')) {
+    //         if (confirm('Are you sure you want to delete this task?')) {
+    //             todos.splice(todoIndex, 1);
+    //             saveTodos();
+    //             renderTodos();
+    //             updateCounters();
+    //         }
+    //     }
+    // });
     
     // Save todos to localStorage with user-specific key
     function saveTodos() {

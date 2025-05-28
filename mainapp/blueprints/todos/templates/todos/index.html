@@ -31,10 +31,10 @@
             <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
         </div>
         
-        <form id="todo-form" class="mb-4" method="POST" action="{{ url_for('todos.create') }}">
+        <form id="todo-form" class="mb-4" hx-post="{{ url_for('todos.create') }}" hx-target="#todo-list" hx-swap="outerHTML">
             <div class="input-group">
                 <input name="text" type="text" id="todo-input" class="form-control todo-input" placeholder="Add a new task..." required="">
-                <button type="submit" class="btn btn-primary add-btn">
+                <button type="submit" class="btn btn-primary add-btn" hx-trigger="click" hx-target="#todo-input">
                     <i class="bi bi-plus-lg me-1"></i> Add
                 </button>
             </div>
@@ -45,13 +45,12 @@
             <button class="filter-btn" data-filter="active">Active</button>
             <button class="filter-btn" data-filter="completed">Completed</button>
         </div>
-
            
         <div id="todo-list">
             {% if todo_lists %}
             {% for todo in todo_lists %}
             <!-- Todo items will be added here dynamically -->
-            <div class="todo-item p-3 d-flex justify-content-between align-items-center">
+            <div id="task-{{todo.tid}}" class="todo-item p-3 d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center">
                     <div class="form-check">
                         <input class="form-check-input btn-complete" type="checkbox">
@@ -62,7 +61,12 @@
                     <button class="btn-edit" title="Edit">
                         <i class="bi bi-pencil"></i>
                     </button>
-                    <button class="btn-delete" title="Delete" onclick="deleteTodo({{ todo.tid }})">
+                    <button 
+                        class="btn-delete" 
+                        title="Delete" 
+                        hx-delete="{{ url_for('todos.delete', tid=todo.tid) }}"
+                        hx-target="#todo-list"
+                        hx-swap="outerHTML">
                         <i class="bi bi-trash"></i>
                     </button>
                 </div>
@@ -78,14 +82,5 @@
         </div>
     </div>  
 </div>
-<!-- <script src="{{ url_for('static', filename='js/todo.js') }}"></script> -->
-<script>
-    async function deleteTodo(tid) {
-        const response = fetch('{{ url_for("todos.delete", tid=tid) }}' + tid, {
-            method: 'DELETE'
-        })
-        window.location.reload();
-    }
-
-</script>
+<script src="{{ url_for('static', filename='js/todo.js') }}"></script>
 {% endblock %}
