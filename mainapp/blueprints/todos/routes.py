@@ -34,16 +34,23 @@ def update():
 
     # update completed
     elif request.method == 'PATCH':
-        id = request.args.get('tid')
+        tid = request.args.get('tid')
         todo = Todos.query.filter(Todos.tid == tid, Todos.user_id == current_user.uid).first_or_404()
         if todo:
             todo.completed = not todo.completed
             db.session.commit()
 
     elif request.method == 'GET':
-        status = request.args.get('status')
+        filter = request.args.get('filter')
 
-
+        match filter:
+            case 'active':
+                todos = Todos.query.filter(Todos.user_id == current_user.uid, Todos.completed == False).all()
+                return render_template('todos/_todo_list.html', todo_lists=todos)
+            case 'completed':
+                todos = Todos.query.filter(Todos.user_id == current_user.uid, Todos.completed == True).all()
+                return render_template('todos/_todo_list.html', todo_lists=todos)
+            
     # render    
     if request.headers.get('HX-Request'): 
         todos = Todos.query.filter(Todos.user_id == current_user.uid).all()

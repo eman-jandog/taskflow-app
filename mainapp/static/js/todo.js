@@ -18,6 +18,8 @@ function initTodoApp() {
     updateCounters();
     
     // Add new todo
+    
+
     todoForm.addEventListener('htmx:afterRequest', async function(e) {
         if (e.detail.elt.id == "todo-form" && e.detail.xhr.status == 200) {
             todoInput.value = ""
@@ -27,90 +29,16 @@ function initTodoApp() {
     
     // Filter todos
     filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active')
+        button.addEventListener('click', async () => {
+            if (!button.classList.contains('active')) {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active')
+                htmx.ajax('GET', 'update', {target: '#todo-list', swap:'outerHTML', values: {filter: button.dataset.filter }})
+            }        
+
         });
     });
     
-    // Event delegation for todo actions
-
-    
-    // Save todos to localStorage with user-specific key
-    function saveTodos() {
-        localStorage.setItem(storageKey, JSON.stringify(todos));
-    }
-    
-    // Render todos based on filter
-    // async function renderTodos() {
-    //     // Clear current list except empty state
-    //     const todoItems = todoList.querySelectorAll('.todo-item');
-    //     todoItems.forEach(item => item.remove());
-
-    //     try {
-    //         const response = await fetch('get', {
-    //             method: 'GET'
-    //         })
-
-    //         if (response.ok) {
-    //             const data = response.text()
-    //             console.log(data)
-    //         }
-    //     } catch(e) {
-    //         console.error('Error: ', e)
-    //     }
-        
-        
-    //     let filteredTodos = [];
-        
-    //     switch (currentFilter) {
-    //         case 'active':
-    //             filteredTodos = todos.filter(todo => !todo.completed);
-    //             break;
-    //         case 'completed':
-    //             filteredTodos = todos.filter(todo => todo.completed);
-    //             break;
-    //         default:
-    //             filteredTodos = [...todos];
-    //     }
-        
-    //     // Sort by creation date (newest first)
-    //     filteredTodos.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        
-    //     if (filteredTodos.length === 0) {
-    //         emptyState.style.display = 'block';
-    //     } else {
-    //         emptyState.style.display = 'none';
-            
-    //         filteredTodos.forEach(todo => {
-    //             const todoItem = document.createElement('div');
-    //             todoItem.classList.add('todo-item', 'p-3', 'd-flex', 'justify-content-between', 'align-items-center');
-    //             if (todo.completed) {
-    //                 todoItem.classList.add('completed');
-    //             }
-    //             todoItem.dataset.id = todo.id;
-                
-    //             todoItem.innerHTML = `
-    //                 <div class="d-flex align-items-center">
-    //                     <div class="form-check">
-    //                         <input class="form-check-input btn-complete" type="checkbox" ${todo.completed ? 'checked' : ''}>
-    //                     </div>
-    //                     <span class="ms-2 todo-text">${todo.text}</span>
-    //                 </div>
-    //                 <div class="todo-actions">
-    //                     <button class="btn-edit" title="Edit">
-    //                         <i class="bi bi-pencil"></i>
-    //                     </button>
-    //                     <button class="btn-delete" title="Delete">
-    //                         <i class="bi bi-trash"></i>
-    //                     </button>
-    //                 </div>
-    //             `;
-                
-    //             todoList.insertBefore(todoItem, emptyState);
-    //         });
-    //     }
-    // }
     
     // Update task counters and progress
     function updateCounters() {

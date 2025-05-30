@@ -56,7 +56,8 @@
                         <input class="form-check-input btn-complete" type="checkbox"
                             hx-patch="{{ url_for('todos.update', tid=todo.tid) }}"
                             hx-target="#todo-list"
-                            hx-swap="outerHTML">
+                            hx-swap="outerHTML"
+                            {% if todo.completed %} checked {% endif %}>
                     </div>
                     <span class="ms-2 todo-text">{{ todo.text }}</span>
                 </div>
