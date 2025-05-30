@@ -17,7 +17,7 @@
             <button 
                 class="btn-delete" 
                 title="Delete" 
-                hx-delete="{{ url_for('todos.delete', tid=todo.tid) }}"
+                hx-delete="{{ url_for('todos.update', tid=todo.tid) }}"
                 hx-target="#todo-list"
                 hx-swap="outerHTML">
                 <i class="bi bi-trash"></i>
