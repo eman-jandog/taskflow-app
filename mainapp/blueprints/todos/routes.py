@@ -23,10 +23,12 @@ def update():
             new_todo = Todos(text=text, user_id=current_user.uid)
             db.session.add(new_todo)
             db.session.commit()
+            return render_template('todos/_todo_item.html', todo=new_todo)
 
     # remove
     elif request.method == 'DELETE':
         tid = request.args.get('tid')
+        print(tid)
         todo = Todos.query.filter(Todos.tid == tid, Todos.user_id == current_user.uid).first_or_404()
         if todo:
             db.session.delete(todo)
@@ -38,8 +40,7 @@ def update():
         todo = Todos.query.filter(Todos.tid == tid, Todos.user_id == current_user.uid).first_or_404()
         if todo:
             todo.completed = not todo.completed
-            db.session.commit()
-            return render_template('todos/_todo_item.html', todo=todo)
+            db.session.commit()   
 
     elif request.method == 'GET':
         filter = request.args.get('filter')

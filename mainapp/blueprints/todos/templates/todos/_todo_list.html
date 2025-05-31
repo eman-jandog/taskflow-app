@@ -2,13 +2,12 @@
     {% if todo_lists %}
     {% for todo in todo_lists %}
     <!-- Todo items will be added here dynamically -->
-    <div id="task-{{ todo.tid }}" class="todo-item p-3 d-flex justify-content-between align-items-center">
+    <div id="task-{{ todo.tid }}" data-id="{{ todo.tid }}" class="todo-item p-3 d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center">
             <div class="form-check">
                 <input class="form-check-input btn-complete" type="checkbox"
                     hx-patch="{{ url_for('todos.update', tid=todo.tid) }}"
-                    hx-target="#task-{{ todo.tid }}"
-                    hx-swap="outerHTML"
+                    hx-swap="none"
                     {% if todo.completed %} checked {% endif %}>
             </div>
             <span class="ms-2 todo-text">{{ todo.text }}</span>
@@ -19,20 +18,12 @@
             </button>
             <button 
                 class="btn-delete" 
-                title="Delete" 
-                hx-delete="{{ url_for('todos.update', tid=todo.tid) }}"
-                hx-target="#todo-list"
-                hx-swap="outerHTML">
+                title="Delete"
+                data-tid = "{{ todo.tid }}">
                 <i class="bi bi-trash"></i>
             </button>
         </div>
     </div>
     {% endfor %}
-    {% else %}
-    <div class="empty-state" id="empty-state">
-        <i class="bi bi-clipboard"></i>
-        <h5>No tasks yet</h5>
-        <p>Add a new task to get started</p>
-    </div>
     {% endif %}
 </div>
