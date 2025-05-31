@@ -16,16 +16,27 @@ function initTodoApp() {
 
     //Initial load
     updateCounters();
-    
     // Add new todo
     
 
     todoForm.addEventListener('htmx:afterRequest', async function(e) {
-        if (e.detail.elt.id == "todo-form" && e.detail.xhr.status == 200) {
+        if (e.detail.elt.id == "todo-form" && e.detail.xhr.status == 200) { 
             todoInput.value = ""
-            updateCounters();
+
+            // update button
+            filterButtons.forEach(btn => {
+                if (btn.dataset.filter == 'all') {
+                    if (!btn.classList.contains('active')) btn.classList.add('active')
+                } else {
+                    btn.classList.remove('active')
+                }
+            });
+
+            updateCounters(); // only count return list: wrong data
         }
     });
+
+    
     
     // Filter todos
     filterButtons.forEach(button => {
@@ -34,11 +45,10 @@ function initTodoApp() {
                 filterButtons.forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active')
                 htmx.ajax('GET', 'update', {target: '#todo-list', swap:'outerHTML', values: {filter: button.dataset.filter }})
-            }        
-
+            }     
         });
     });
-    
+  
     
     // Update task counters and progress
     function updateCounters() {

@@ -39,6 +39,7 @@ def update():
         if todo:
             todo.completed = not todo.completed
             db.session.commit()
+            return render_template('todos/_todo_item.html', todo=todo)
 
     elif request.method == 'GET':
         filter = request.args.get('filter')
@@ -50,7 +51,7 @@ def update():
             case 'completed':
                 todos = Todos.query.filter(Todos.user_id == current_user.uid, Todos.completed == True).all()
                 return render_template('todos/_todo_list.html', todo_lists=todos)
-            
+        
     # render    
     if request.headers.get('HX-Request'): 
         todos = Todos.query.filter(Todos.user_id == current_user.uid).all()
