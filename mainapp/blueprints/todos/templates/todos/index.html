@@ -3,73 +3,78 @@
 {% block title %}TaskFlow{% endblock %}
 
 {% block content %}
-    <div class="app-container bg-white" id="todo-app" style="display: block;">
-        <div class="app-header">
-            <div class="d-flex justify-content-between align-items-center">
-                <h1 class="mb-0">TaskFlow</h1>
-                <div class="d-flex align-items-center">
-                    <span id="date-display" class="me-3">Sunday, May 25, 2025</span>
-                    <span id="task-counter" class="badge bg-white text-primary me-3">0 tasks</span>
-                    <div class="dropdown">
-                        <div class="user-avatar" id="user-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-fill"></i>
-                        </div>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="user-dropdown">
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profile</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Settings</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#" id="sign-out"><i class="bi bi-box-arrow-right"></i> Sign out</a></li>
-                        </ul>
+<div class="app-container bg-white" id="todo-app" style="display: block;">
+    <div class="app-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="mb-0">TaskFlow</h1>
+            <div class="d-flex align-items-center">
+                <span id="date-display" class="me-3">Week-Month-Day-Year"</span>
+                <span id="task-counter" class="badge bg-white text-primary me-3">0 tasks</span>
+                <div class="dropdown">
+                    <div class="user-avatar" id="user-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-fill"></i>
                     </div>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="user-dropdown">
+                        <li><a class="dropdown-item" href="#" onclick="notWorking()"><i class="bi bi-person"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="notWorking()"><i class="bi bi-gear"></i> Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{{ url_for('users.logout') }}" id="sign-out"><i class="bi bi-box-arrow-right"></i> Sign out</a></li>
+                    </ul>
                 </div>
             </div>
-            <p class="mb-0 mt-2 opacity-75">Organize your tasks efficiently</p>
+        </div>
+        <p class="mb-0 mt-2 opacity-75">Organize your tasks efficiently</p>
+    </div>
+    
+    <div class="p-4">
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
         </div>
         
-        <div class="p-4">
-            <div class="progress-container">
-                <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+        <form id="todo-form" class="mb-4" method="POST">
+            <div class="input-group">
+                <input name="text" type="text" id="todo-input" class="form-control todo-input" placeholder="Add a new task..." required="">
+                <button type="submit" class="btn btn-primary add-btn">
+                    <i class="bi bi-plus-lg me-1"></i> Add
+                </button>
             </div>
-            
-            <form id="todo-form" class="mb-4">
-                <div class="input-group">
-                    <input type="text" id="todo-input" class="form-control todo-input" placeholder="Add a new task..." required="">
-                    <button type="submit" class="btn btn-primary add-btn">
-                        <i class="bi bi-plus-lg me-1"></i> Add
+        </form>
+        
+        <div class="filters mb-4 d-flex justify-content-center">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="active">Active</button>
+            <button class="filter-btn" data-filter="completed">Completed</button>
+        </div>
+           
+        <div id="todo-list">
+            {% if todo_lists %}
+            {% for todo in todo_lists %}
+            <!-- Todo items will be added here dynamically -->
+            <div id="task-{{ todo.tid }}" data-id="{{ todo.tid }}" class="todo-item p-3 d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <div class="form-check">
+                        <input class="form-check-input btn-complete" type="checkbox"
+                            {% if todo.completed %} checked="checked" {% endif %}>
+                    </div>
+                    <span class="ms-2 todo-text">{{ todo.text }}</span>
+                </div>
+                <div class="todo-actions">
+                    <button class="btn-edit" title="Edit">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <button 
+                        class="btn-delete" 
+                        title="Delete">
+                        <i class="bi bi-trash"></i>
                     </button>
                 </div>
-            </form>
-            
-            <div class="filters mb-4 d-flex justify-content-center">
-                <button class="filter-btn active" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="active">Active</button>
-                <button class="filter-btn" data-filter="completed">Completed</button>
             </div>
-            
-            <div id="todo-list">
-                <!-- Todo items will be added here dynamically -->
-                <div class="todo-item p-3 d-flex justify-content-between align-items-center" data-id="1748186302573">
-                            <div class="d-flex align-items-center">
-                                <div class="form-check">
-                                    <input class="form-check-input btn-complete" type="checkbox">
-                                </div>
-                                <span class="ms-2 todo-text">sample</span>
-                            </div>
-                            <div class="todo-actions">
-                                <button class="btn-edit" title="Edit">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                                <button class="btn-delete" title="Delete">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
-                </div>
-                <div class="empty-state" id="empty-state" style="display: none;">
-                    <i class="bi bi-clipboard"></i>
-                    <h5>No tasks yet</h5>
-                    <p>Add a new task to get started</p>
-                </div>
-            </div>
-        </div>  
-    </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>  
+</div>
+<script src="{{ url_for('static', filename='js/todo.js') }}"></script>
+<script type="text/javascript">
+</script>
 {% endblock %}

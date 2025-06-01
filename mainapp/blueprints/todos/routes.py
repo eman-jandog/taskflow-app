@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import login_required, current_user
 from mainapp.blueprints.todos.models import Todos 
 from mainapp.app import db
@@ -10,28 +10,50 @@ todos = Blueprint('todos', __name__, template_folder='templates')
 @todos.route('/')
 @login_required
 def index():
-    todos_list = Todos.query.filter(Todos.user_id == current_user.uid).all()
-    return render_template('todos/index.html', todo_list=todos_list)
-    
+    todos = Todos.query.filter(Todos.user_id == current_user.uid).all()
+    return render_template('todos/index.html', todo_lists=todos)
 
-@todos.route('/create', methods=['POST'])
+@todos.route('/update', methods=['GET', 'DELETE', 'PATCH', 'POST'])
 @login_required
-def create():
-    description = request.form.get('description')
+def update():
+    # add
+    if request.method == 'POST':
+        text = request.form.get('text')
+        if text:
+            new_todo = Todos(text=text, user_id=current_user.uid)
+            db.session.add(new_todo)
+            db.session.commit()
 
-    new_todo = Todos(description=description, user_id=current_user.uid)
+    # remove
+    elif request.method == 'DELETE':
+        tid = request.args.get('tid')
+        print(tid)
+        todo = Todos.query.filter(Todos.tid == tid, Todos.user_id == current_user.uid).first_or_404()
+        if todo:
+            db.session.delete(todo)
+            db.session.commit()
 
-    db.session.add(new_todo)
-    db.session.commit()    
+    # update completed
+    elif request.method == 'PATCH':
+        tid = request.form.get('tid')
+        todo = Todos.query.filter(Todos.tid == tid, Todos.user_id == current_user.uid).first_or_404()
+        if todo:
+            todo.completed = not todo.completed
+            db.session.commit()   
+
+    elif request.method == 'GET':
+        filter = request.args.get('filter')
+
+        match filter:
+            case 'active':
+                todos = Todos.query.filter(Todos.user_id == current_user.uid, Todos.completed == False).all()
+                return render_template('todos/_todo_list.html', todo_lists=todos)
+            case 'completed':
+                todos = Todos.query.filter(Todos.user_id == current_user.uid, Todos.completed == True).all()
+                return render_template('todos/_todo_list.html', todo_lists=todos)
+        
+    # render    
+    if request.headers.get('HX-Request'): 
+        todos = Todos.query.filter(Todos.user_id == current_user.uid).all()
+        return render_template('todos/_todo_list.html', todo_lists=todos)
     return redirect(url_for('todos.index'))
-
-@todos.route('/delete/<tid>', methods=['DELETE'])
-@login_required
-def delete(tid):
-    todo = Todos.query.filter(Todos.tid == tid, Todos.user_id == current_user.uid).first_or_404()
-    if todo:
-        db.session.delete(todo)
-        db.session.commit()
-        return '', 200
-    else:
-        return 'Invalid todo Id', 400
