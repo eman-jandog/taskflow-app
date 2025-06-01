@@ -126,4 +126,8 @@ function initTodoApp() {
     }
 }
 
+function notWorking() {
+    alert("I'll be working in this feature soon. Thanks!")
+}
+
 document.addEventListener('DOMContentLoaded', initTodoApp())

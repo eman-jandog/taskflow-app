@@ -70,5 +70,6 @@ def register():
 @users.route('/logout')
 def logout():
     logout_user()
+    flash("Successfully logout", "success")
     return redirect(url_for('users.login'))
 
