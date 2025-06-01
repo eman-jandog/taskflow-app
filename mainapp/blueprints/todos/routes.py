@@ -23,7 +23,6 @@ def update():
             new_todo = Todos(text=text, user_id=current_user.uid)
             db.session.add(new_todo)
             db.session.commit()
-            return render_template('todos/_todo_item.html', todo=new_todo)
 
     # remove
     elif request.method == 'DELETE':
@@ -36,7 +35,7 @@ def update():
 
     # update completed
     elif request.method == 'PATCH':
-        tid = request.args.get('tid')
+        tid = request.form.get('tid')
         todo = Todos.query.filter(Todos.tid == tid, Todos.user_id == current_user.uid).first_or_404()
         if todo:
             todo.completed = not todo.completed
@@ -58,8 +57,3 @@ def update():
         todos = Todos.query.filter(Todos.user_id == current_user.uid).all()
         return render_template('todos/_todo_list.html', todo_lists=todos)
     return redirect(url_for('todos.index'))
-
-
-
-
-    

@@ -13,46 +13,43 @@ function initTodoApp() {
     const taskCounter = document.getElementById('task-counter');
     const progressBar = document.getElementById('progress-bar');
     const filterButtons = document.querySelectorAll('.filter-btn');
-    const displayEmpty = document.querySelectorAll('.filter-btn');
+    let currentFilter;
 
     //Initial load
-    updateCounters()
+    if (updateCounters() == 0) displayEmpty()
+
     // Filter todos
     filterButtons.forEach(button => {
         button.addEventListener('click', async () => {
             if (!button.classList.contains('active')) {
                 filterButtons.forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active')
-                htmx.ajax('GET', 'update', {target: '#todo-list', swap:'outerHTML', values: {filter: button.dataset.filter }})
+                currentFilter = button.dataset.filter
+                htmx.ajax('GET', 'update', {
+                    target: '#todo-list', 
+                    swap:'innerHTML', 
+                    values: {filter: currentFilter }
+                })
+                .then(() => {
+                    if (updateCounters() == 0) displayEmpty()
+                })
             }     
         });
     });
-
 
     
     // Add new todo
     todoForm.addEventListener('submit', async function(e) {
         e.preventDefault();
-
         const form = new FormData(this)
-        
-        
+
         htmx.ajax('POST', 'update', {
             target: todoList,
-            swap: 'afterbegin',
+            swap: currentFilter == 'completed' ? 'none' : 'innerHTML',
             values: form
         })
         .then(() => {
             todoInput.value = ""
-
-            // update button
-            filterButtons.forEach(btn => {
-                if (btn.dataset.filter == 'all') {
-                    if (!btn.classList.contains('active')) btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
             updateCounters(); // only count return list: wrong data
         })        
     });
@@ -71,7 +68,24 @@ function initTodoApp() {
                 }                
             })
             .then((r) => {
-                updateCounters()
+                if (updateCounters() == 0) displayEmpty()
+            })
+        }
+
+        if (target.closest('.btn-complete') || target.classList.contains('btn-complete')) {
+            htmx.ajax('PATCH', 'update', {
+                swap: 'none',
+                values: {
+                    'tid': todoID
+                }                
+            })
+            .then((r) => {
+                if (target.closest('.btn-complete').getAttribute('checked')) {
+                    target.closest('.btn-complete').removeAttribute('checked')
+                } else {
+                    target.closest('.btn-complete').setAttribute('checked', 'checked')
+                }                
+                updateCounters();
             })
             
         }
@@ -82,17 +96,33 @@ function initTodoApp() {
     function updateCounters() {
         const totalTasks = document.querySelectorAll(".todo-item").length;
 
-        const completedTasks = document.querySelectorAll("checked").length;
+        const completedTasks = document.querySelectorAll('[checked]').length;
         const progressPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
         
         taskCounter.textContent = `${totalTasks} task${totalTasks !== 1 ? 's' : ''}`;
         progressBar.style.width = `${progressPercentage}%`;
 
-        if (totalTasks == 0) {
-            emptyState.style.display = 'block'
-        } else {
-            emptyState.style.display = 'none'
-        }
+        return totalTasks;
+    }
+
+    function displayEmpty() {
+            
+        let div = document.createElement('div')
+        div.className = 'empty-state'
+        
+        let icon = document.createElement('i')
+        icon.className = 'bi bi-clipboard'
+        div.appendChild(icon)
+
+        let h5 = document.createElement('h5')
+        h5.innerText = 'No tasks yet'
+        div.appendChild(h5)
+        
+        let p = document.createElement('p')
+        p.innerText = 'Add a new task to get started'
+        div.appendChild(p)
+
+        todoList.appendChild(div)
     }
 }
 
