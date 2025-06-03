@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask_login import login_required, current_user
 from mainapp.app import db
 from mainapp.blueprints.users.models import Users
 from mainapp.blueprints.todos.models import Todos
@@ -12,11 +13,16 @@ def record_params(setup_state):
 
 
 @admin.route('/main')
+@login_required
 def main():
-    user_list = Users.query.all()
-    return render_template('administrator/main.html', users=user_list, Todos=Todos)
+    if current_user.role == 'administrator':
+        user_list = Users.query.all()
+        return render_template('administrator/main.html', users=user_list, Todos=Todos)
+    flash('Invalid url!', 'success')
+    return redirect(url_for('users.login'))
 
 @admin.route('/delete/<uid>', methods=['DELETE'])
+@login_required
 def delete(uid):
     user = Users.query.filter(Users.uid == uid).first()
     todos = Todos.query.filter(Todos.user_id == user.uid).all()
