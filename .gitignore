@@ -1,6 +1,6 @@
-# Vscode
 .vscode/
 **/migrations/
+.env
 
 # Python .gitignore
 # Byte-compiled / optimized / DLL files

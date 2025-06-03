@@ -7,12 +7,15 @@ function utility() {
             flashMsg.style.display = 'none';
         }, 2000)
     }
-    
-    // signOut.addEventListener('click', function(e) {
-    //     e.preventDefault();
-    //     localStorage.setItem('isLoggedIn', 'false');
-    //     showSigninPage();
-    // });
+
+    const notWorkingElem = document.querySelectorAll('#not-working')
+    notWorkingElem.forEach(elem => {
+        elem.addEventListener('click', () => {
+            alert("I'll be working in this feature soon. Thanks!");
+        })
+    })
 }
+
+
 
 document.addEventListener('DOMContentLoaded', utility())

@@ -3,14 +3,18 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
+from dotenv import load_dotenv
+import os
 
 
 db = SQLAlchemy()
 
 def create_app():
+    load_dotenv()
     app = Flask(__name__, template_folder='templates', static_folder='static', static_url_path='/')
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./appdb.db'
-    app.secret_key = "SOME KEY HERE"
+    app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY')
+    
 
     db.init_app(app)
 
