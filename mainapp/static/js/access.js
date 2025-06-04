@@ -18,12 +18,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function showSigninPage() {
         signinPage.style.display = 'block';
         signupPage.style.display = 'none';
-        todoApp.style.display = 'none';
     }
     
     function showSignupPage() {
         signinPage.style.display = 'none';
         signupPage.style.display = 'block';
-        todoApp.style.display = 'none';
     }
+
+    
 });
