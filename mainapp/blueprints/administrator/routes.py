@@ -39,7 +39,12 @@ def register():
     if request.method == "POST":
         username = request.form.get('username')
         password = request.form.get('password')
+        confirm = request.form.get('confirm_password')
         email = request.form.get('email')
+
+        if password != confirm:
+            flash(f'Invalid password!', 'error')
+            return redirect(url_for('admin.main'))
 
         hash_password = admin.bcrypt.generate_password_hash(password).decode('utf-8')
         user = Users(username=username, password=hash_password, email=email, role="administrator")
