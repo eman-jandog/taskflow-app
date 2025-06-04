@@ -50,7 +50,12 @@ def login():
 def register():
     username = request.form.get('username')
     password = request.form.get('password')
+    confirm = request.form.get('confirm_password')
     email = request.form.get('email')
+
+    if password != confirm:
+        flash(f'Invalid password!', 'error')
+        return redirect(url_for('users.login'))
 
     try:
         hash_password = users.bcrypt.generate_password_hash(password).decode('utf-8')

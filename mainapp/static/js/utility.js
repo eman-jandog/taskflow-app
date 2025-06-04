@@ -3,6 +3,7 @@ function utility() {
     const flashMsg = document.getElementById('flash-msg')
     const password = document.getElementById('signup-password');
     const passwordConfirm = document.getElementById('signup-confirm-password');
+    const submitBtn = document.getElementById('btn-form-submit')
 
 
     // flash msg in flask
@@ -27,9 +28,11 @@ function utility() {
         if (password.value != e.target.value && e.target.value != '') {
             e.target.classList.remove('auth-input')
             e.target.classList.add('auth-input-invalid')
+            submitBtn.setAttribute('disabled', 'disabled')
         } else {
             e.target.classList.remove('auth-input-invalid')
             e.target.classList.add('auth-input')
+            submitBtn.removeAttribute('disabled')
         }
     })    
 }
