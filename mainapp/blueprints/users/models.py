@@ -1,12 +1,14 @@
 from mainapp.app import db
 
-class Users(db.Model):
+class User(db.Model):
     __tablename__ = 'users'
     uid = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
     role = db.Column(db.String)
+
+    todos = db.relationship('Todo', backref='user', lazy=True, cascade='all, delete-orphan')
 
     @property
     def is_active(self):

@@ -24,8 +24,8 @@ def create_app():
 
     @loginManager.user_loader
     def load_user(uid):
-        from mainapp.blueprints.users.models import Users
-        return Users.query.get(uid)
+        from mainapp.blueprints.users.models import User
+        return User.query.get(uid)
 
     bcrypt = Bcrypt(app)
 

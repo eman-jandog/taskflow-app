@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for,  flash, jsonify
 from flask_login import login_user, logout_user, current_user
 from mainapp.app import db
-from mainapp.blueprints.users.models import Users
+from mainapp.blueprints.users.models import User
 
 users = Blueprint('users',__name__, template_folder="templates")
 
@@ -17,7 +17,7 @@ def login():
         if current_user.is_authenticated:
             return redirect(url_for('todos.index')) 
         
-        elif not Users.query.filter(Users.role == 'administrator').first():
+        elif not User.query.filter(User.role == 'administrator').first():
             flash("Account manager required!", 'error')
             return redirect(url_for('admin.register'))
         
@@ -28,7 +28,7 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
 
-        user = Users.query.filter(Users.username == username).first()
+        user = User.query.filter(User.username == username).first()
 
         if not user:
             flash('Invalid username!', 'error')
@@ -59,7 +59,7 @@ def register():
 
     try:
         hash_password = users.bcrypt.generate_password_hash(password).decode('utf-8')
-        user = Users(username=username, email=email, password=hash_password, role=None)
+        user = User(username=username, email=email, password=hash_password, role=None)
 
         db.session.add(user)
         db.session.commit()
