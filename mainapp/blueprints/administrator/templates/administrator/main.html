@@ -9,10 +9,6 @@
         <h2 >USER LIST:</h2>
         {% if user_lists %}
         <table class="table table-hover table-bordered">
-    <div id="users-panel" class="container" style="max-width: 800px; width: 100%">
-        <h2 >USER LIST:</h2>
-        {% if user_lists %}
-        <table class="table table-hover table-bordered">
             <thead>
                 <tr>
                     <th scope="col">Id</th>
@@ -49,37 +45,13 @@
                     <th scope="row">{{ todo.tid }}</th>
                     <td>{{ todo.text }}</td>
                     <td>{{ todo.user_id }}</td>
-                    <td>{{ user.todos|length }}</td>
                 </tr>            
             {% endfor %}
             </tbody> 
         </table>
         {% else %}
         <p>No data</p>
-        {% endif %}
-        <h2 >TODO LIST:</h2>
-        {% if todo_lists %}
-        <table class="table table-hover table-bordered">
-            <thead>
-                <tr>
-                    <th scope="col">Id</th>
-                    <th scope="col">Todo</th>
-                    <th scope="col">User</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for todo in todo_lists %}
-                <tr>
-                    <th scope="row">{{ todo.tid }}</th>
-                    <td>{{ todo.text }}</td>
-                    <td>{{ todo.user_id }}</td>
-                </tr>            
-            {% endfor %}
-            </tbody> 
-        </table>
-        {% else %}
-        <p>No data</p>
-        {% endif %}
+        {% endif %}         
         <div class="input-group mb-3">
             <input type="file" class="form-control" id="fileInput" name="file" aria-describedby="fileInput" aria-label="Update" accept="application/json">
             <label class="btn btn-primary" for="fileInput" type="submit" id="btn-update">Update</label>

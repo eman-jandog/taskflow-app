@@ -4,7 +4,7 @@ class TodoSchema(Schema):
     user_id = fields.Int()
     text = fields.Str()
     completed = fields.Bool()
-    creation_date = fields.Date(required=False)
+    creation_date = fields.Date()
     completed_date = fields.Date(required=False, allow_none=True)
 
 class UserSchema(Schema):
