@@ -39,6 +39,7 @@ def update():
         todo = Todo.query.filter(Todo.tid == tid, Todo.user_id == current_user.uid).first_or_404()
         if todo:
             todo.completed = not todo.completed
+            todo.completed_date = db.func.current_timestamp() if todo.completed else None
             db.session.commit()   
 
     elif request.method == 'GET':
