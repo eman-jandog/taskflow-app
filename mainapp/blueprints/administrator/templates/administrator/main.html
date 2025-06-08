@@ -14,6 +14,7 @@
                     <th scope="col">Id</th>
                     <th scope="col">Users</th>
                     <th scope="col">Task Count</th>
+                    <th scope="col">Role</th>
                 </tr>
             </thead>
             <tbody>
@@ -22,6 +23,7 @@
                     <th scope="row">{{ user.uid }}</th>
                     <td>{{ user.username }}</td>
                     <td>{{ user.todos|length }}</td>
+                    <td>{{ user.role}}</td>
                 </tr>            
             {% endfor %}
             </tbody> 

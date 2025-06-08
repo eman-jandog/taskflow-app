@@ -12,7 +12,7 @@ db = SQLAlchemy()
 def create_app():
     load_dotenv()
     app = Flask(__name__, template_folder='templates', static_folder='static', static_url_path='/')
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./appdb.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('POSTGRES_DB')
     app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY')
     
 
