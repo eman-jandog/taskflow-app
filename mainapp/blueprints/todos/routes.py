@@ -48,13 +48,13 @@ def update():
         match filter:
             case 'active':
                 todos = Todo.query.filter(Todo.user_id == current_user.uid, Todo.completed == False).all()
-                return render_template('todos/_todo_list.html', todo_lists=todos)
+                return render_template('todos/_todo_list.html', todo_lists=todos), 200
             case 'completed':
                 todos = Todo.query.filter(Todo.user_id == current_user.uid, Todo.completed == True).all()
-                return render_template('todos/_todo_list.html', todo_lists=todos)
+                return render_template('todos/_todo_list.html', todo_lists=todos), 200
         
     # render    
     if request.headers.get('HX-Request'): 
         todos = Todo.query.filter(Todo.user_id == current_user.uid).all()
-        return render_template('todos/_todo_list.html', todo_lists=todos)
+        return render_template('todos/_todo_list.html', todo_lists=todos), 200
     return redirect(url_for('todos.index'))

@@ -22,4 +22,10 @@
     </div>
 </div>
 {% endfor %}
+{% else %}
+    <div class="empty-state">
+        <i class="bi bi-clipboard"></i>
+        <h5>No tasks yet</h5>
+        <p>Add a new task to get started</p>
+    </div>
 {% endif %}

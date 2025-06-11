@@ -16,7 +16,7 @@ function initTodoApp() {
     let currentFilter;
 
     //Initial load
-    if (updateCounters() == 0) displayEmpty()
+    updateCounters();
 
     // Filter todos
     filterButtons.forEach(button => {
@@ -31,7 +31,7 @@ function initTodoApp() {
                     values: {filter: currentFilter }
                 })
                 .then(() => {
-                    if (updateCounters() == 0) displayEmpty()
+                    updateCounters();
                 })
             }     
         });
@@ -68,7 +68,7 @@ function initTodoApp() {
                 }                
             })
             .then((r) => {
-                if (updateCounters() == 0) displayEmpty()
+                updateCounters();
             })
         }
 
@@ -103,26 +103,6 @@ function initTodoApp() {
         progressBar.style.width = `${progressPercentage}%`;
 
         return totalTasks;
-    }
-
-    function displayEmpty() {
-            
-        let div = document.createElement('div')
-        div.className = 'empty-state'
-        
-        let icon = document.createElement('i')
-        icon.className = 'bi bi-clipboard'
-        div.appendChild(icon)
-
-        let h5 = document.createElement('h5')
-        h5.innerText = 'No tasks yet'
-        div.appendChild(h5)
-        
-        let p = document.createElement('p')
-        p.innerText = 'Add a new task to get started'
-        div.appendChild(p)
-
-        todoList.appendChild(div)
     }
 }
 
